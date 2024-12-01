@@ -11,7 +11,7 @@ const ProductDetail = () => {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const response = await axios.get(`${baseUrl}/api/products/${id}`);
+        const response = await axios.get(`${baseUrl}/api/products/${id}?populate=*`);
         setProduct(response.data.data); // Strapi wraps the result in `data`
       } catch (error) {
         console.error('Error fetching product:', error);
@@ -23,15 +23,24 @@ const ProductDetail = () => {
 
   if (!product) return <Typography>Loading...</Typography>;
 
-  const { name, price, description, volume, marknewproduct } = product.attributes;
+  // Destructure product attributes
+  const { name, price, description, volume, marknewproduct, image } = product;
 
+  // Extract image URL (use the `url` of the first image if available)
+  const imageUrl = image?.[0]?.formats?.medium?.url || image?.[0]?.url;
+  const fullImageUrl = `${baseUrl}${imageUrl}`; // Prepend the base URL
+  
   return (
     <Container>
       <Box sx={{ mt: 4 }}>
         <Grid container spacing={4}>
           {/* Product Image */}
           <Grid item xs={12} md={6}>
-            <img src="https://via.placeholder.com/300" alt={name} width="100%" />
+            {imageUrl ? (
+              <img src={fullImageUrl} alt={name} width="100%" />
+            ) : (
+              <img src="https://via.placeholder.com/300" alt="Placeholder" width="100%" />
+            )}
           </Grid>
 
           {/* Product Info */}

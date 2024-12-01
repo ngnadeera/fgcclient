@@ -1,6 +1,5 @@
 import React from 'react';
-import { Box, Checkbox, FormGroup, FormControlLabel, Typography } from '@mui/material';
-import PriceSlider from './PriceSlider';
+import { Box, Checkbox, FormGroup, FormControlLabel, Typography, Slider } from '@mui/material';
 
 const FilterBar = ({ categories, onCategoryChange, priceRange, onPriceChange }) => {
   return (
@@ -12,12 +11,25 @@ const FilterBar = ({ categories, onCategoryChange, priceRange, onPriceChange }) 
         {categories.map((category) => (
           <FormControlLabel
             key={category}
-            control={<Checkbox onChange={() => onCategoryChange(category)} />}
+            control={
+              <Checkbox
+                onChange={() => onCategoryChange(category)}
+              />
+            }
             label={category}
           />
         ))}
       </FormGroup>
-      <PriceSlider value={priceRange} onChange={onPriceChange} />
+      <Typography variant="h6" sx={{ mt: 3, mb: 2 }}>
+        Price Range
+      </Typography>
+      <Slider
+        value={priceRange}
+        onChange={onPriceChange}
+        valueLabelDisplay="auto"
+        min={1000} // Adjust to match your minimum product price
+        max={100000} // Adjust to match your maximum product price
+      />
     </Box>
   );
 };

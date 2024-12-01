@@ -3,13 +3,26 @@ import { Card, CardMedia, CardContent, Typography, Button, Box } from '@mui/mate
 import { Link } from 'react-router-dom';
 
 const ProductCard = ({ product }) => {
+  const baseUrl = process.env.REACT_APP_API_BASE_URL;
+  const imageUrl = product.image?.[0]?.formats?.medium?.url || product.image?.[0]?.url;
+  const fullImageUrl = `${baseUrl}${imageUrl}`; // Prepend the base URL
+  console.log("img",fullImageUrl);
+  
   return (
+
+    <>
+
     <Card sx={{ maxWidth: 300 }}>
-      <Link to={`/product/${product.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+      <Link to={`/product/${product.documentId}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+
         <CardMedia
           component="img"
           height="300"
-          image={product.image}
+          image={imageUrl ? (
+            <img src={fullImageUrl} alt={"Placeholder"} />
+          ) : (
+            <img src="https://via.placeholder.com/300" alt="Placeholder" width="100%" />
+          )}
           alt={product.name}
         />
         <CardContent>
@@ -30,6 +43,7 @@ const ProductCard = ({ product }) => {
         Buy Now
       </Button>
     </Card>
+    </>
   );
 };
 
